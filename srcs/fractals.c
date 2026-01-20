@@ -6,7 +6,7 @@
 /*   By: mtakiyos <mtakiyos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/17 01:18:51 by mtakiyos          #+#    #+#             */
-/*   Updated: 2026/01/17 06:41:01 by mtakiyos         ###   ########.fr       */
+/*   Updated: 2026/01/19 20:46:26 by mtakiyos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@ int	mandelbrot(t_complex c, int max_iter)
 	
 	z.real = 0.0;
 	z.imag= 0.0;
+	z_real_sq = 0.0;
+	z_imag_sq = 0.0;
 	i = 0;
+	
 	while (i < max_iter)
 	{
 		// z² = (a + bi)² a² - b² + 2abi
@@ -41,6 +44,8 @@ int julia(t_complex z, t_complex c, t_fractal *fractal, int max_iter)
 	int		i;
 	double	z_real_sq;
 	double	z_imag_sq;
+	(void)c;
+	(void)max_iter;
 	
 	i = 0;
 	while (i < fractal->max_iter)
