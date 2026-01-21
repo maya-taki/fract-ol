@@ -6,7 +6,7 @@
 #    By: mtakiyos <mtakiyos@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/14 19:04:21 by mtakiyos          #+#    #+#              #
-#    Updated: 2026/01/19 20:43:13 by mtakiyos         ###   ########.fr        #
+#    Updated: 2026/01/20 17:09:04 by mtakiyos         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,8 +38,10 @@ RESET			:= \033[0m
 
 
 SRCS := main.c $(SRC_DIR)/init.c \
-			$(SRC_DIR)/error.c $(SRC_DIR)/fractals.c \
-			$(SRC_DIR)/render.c  $(SRC_DIR)/hooks.c 
+			$(SRC_DIR)/error.c $(SRC_DIR)/fractal.c \
+			$(SRC_DIR)/render.c  $(SRC_DIR)/hook.c \
+			$(SRC_DIR)/color.c
+			
 OBJS := $(addprefix $(OBJ_DIR)/,$(notdir $(SRCS:.c=.o)))
 
 MLX_LIBS := -lX11 -lXext -lm

@@ -6,13 +6,13 @@
 /*   By: mtakiyos <mtakiyos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 20:42:23 by mtakiyos          #+#    #+#             */
-/*   Updated: 2026/01/19 21:01:37 by mtakiyos         ###   ########.fr       */
+/*   Updated: 2026/01/20 21:04:54 by mtakiyos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-static void	init_viewport(t_fractal *fractal)
+static void	ft_init_viewport(t_fractal *fractal)
 {
 	if (fractal->type == MANDELBROT)
 	{
@@ -30,37 +30,37 @@ static void	init_viewport(t_fractal *fractal)
 	}
 }
 
-void	data_init(t_fractal *fractal, char *name)
+void	ft_data_init(t_fractal *fractal, char *name)
 {
 	fractal->name = name;
 	if (ft_strncmp(name, "mandelbrot", 10) == 0)
-	fractal->type = MANDELBROT;	
-	else if (ft_strncmp(name, "julia", 5) == 0)
-	fractal->type = JULIA;
+		fractal->type = MANDELBROT;	
+	else if (ft_strncmp(name, "julia", 6) == 0)
+		fractal->type = JULIA;
 	fractal->max_iter = MAX_ITERATIONS;
 	fractal->color_shift = 0;
 	fractal->color_scheme = 0;
-	init_viewport(fractal);
+	//fractal->zoom = 1.0;
+	ft_init_viewport(fractal);
 }
 
 
-void	fractal_init(t_fractal *fractal)
+void	ft_fractal_init(t_fractal *fractal)
 {
 	//MLX
 	fractal->x_max = WIDTH;
 	fractal->y_min = HEIGHT;
 	fractal->x_min = 0.0;
 	fractal->y_max = 0.0;
-	fractal->zoom = 1.0;
 	fractal->img.img_ptr = NULL;
 	fractal->mlx_connection = mlx_init();
 	if (!fractal->mlx_connection)
-		error_exit("MLX initialization failed\n");
+		ft_error_exit("MLX initialization failed\n");
 	fractal->mlx_window = mlx_new_window(fractal->mlx_connection, WIDTH, HEIGHT, fractal->name);
 	if (!fractal->mlx_window)
 	{
 		free(fractal->mlx_connection);
-		error_exit("Error: Unable to create window\n");
+		ft_error_exit("Error: Unable to create window\n");
 	}
 	fractal->img.img_ptr = mlx_new_image(fractal->mlx_connection, WIDTH, HEIGHT);
 	if (!fractal->img.img_ptr)
