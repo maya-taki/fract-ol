@@ -1,19 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mtakiyos <mtakiyos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/14 17:07:17 by mtakiyos          #+#    #+#             */
-/*   Updated: 2026/01/23 16:40:44 by mtakiyos         ###   ########.fr       */
+/*   Created: 2026/01/22 15:34:33 by mtakiyos          #+#    #+#             */
+/*   Updated: 2026/01/23 17:08:39 by mtakiyos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/fractol.h"
+#include "fractol.h"
 
-int	ft_error_exit(char *msg)
+int	ft_isdouble(char *nptr)
 {
-	ft_putendl_fd(msg, 2);
-	exit(EXIT_FAILURE);	
+	if (*nptr == '.')
+		return (0);
+	if (*nptr == '-' || *nptr == '+')
+		nptr++;
+	if (*nptr == '\0')
+		return (0);
+	while (ft_isdigit(*nptr))
+		nptr++;
+	if (*nptr == '.')
+		nptr++;
+	if (*nptr == '.')
+		return (0);
+	while (ft_isdigit(*nptr))
+	{
+		nptr++;
+	}
+	if (*nptr == '\0')
+		return (1);
+	return (0);
 }

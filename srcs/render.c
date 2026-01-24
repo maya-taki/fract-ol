@@ -6,53 +6,85 @@
 /*   By: mtakiyos <mtakiyos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 23:03:05 by mtakiyos          #+#    #+#             */
-/*   Updated: 2026/01/20 22:47:52 by mtakiyos         ###   ########.fr       */
+/*   Updated: 2026/01/23 22:47:20 by mtakiyos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-static void	ft_mlx_pixel_put(t_fractal *fractal, int x, int y, int color)
+static void	ft_mlx_pixel_put(t_image *image, int x, int y, int color)
 {
 	char	*dst;
 	
 	if ((x >= 0 && x <= WIDTH) && (y >= 0 && y <= HEIGHT))
 	{		
-		dst = fractal->img.pixels_ptr + (y * fractal->img.line_len + x * (fractal->img.bpp / 8));
+		dst = image->pixels_ptr + (y * image->line_len + (x * (image->bpp / 8)));
 		*(unsigned int*)dst = color;
 	}
 	else
 		return ;
 }
 
-double		map(double value, double in_min, double in_max, double out_min, double out_max)
-{
-	return (out_min + (value - in_min) * (out_max - out_min) / (in_max - in_min));
-}
-
-static int	calculate_pixel(t_fractal *fractal, int x, int y)
+static void		ft_set_mandelbrot(t_fractal *fractal, int x, int y)
 {
 	t_complex	c;
 	t_complex	z;
 	int			iter;
+	int			color;
 
 	iter = 0;
-	c.real = map(x, 0, WIDTH, fractal->x_min, fractal->x_max);
-	c.imag = map(y, 0, HEIGHT, fractal->y_max, fractal->y_min);
-	// how many times you want to iterate z^2 + c
-	if (fractal->type == MANDELBROT)
-	{		
-		iter = ft_mandelbrot(c, fractal->max_iter);
-	}
-	else if (fractal->type == JULIA)
+	z.x = 0.0;
+	z.y = 0.0;
+	c.x = ft_map(x, fractal->x_min, fractal->x_max, WIDTH);
+	c.y = ft_map(y, fractal->y_min, fractal->y_max, HEIGHT);
+	while (iter < fractal->max_iter && z.x < 4)
 	{
-		z.real = c.real;
-		z.imag = c.imag;
-		c.real = fractal->julia_real;
-		c.imag = fractal->julia_imag;
-		iter = ft_julia(z, c, fractal->max_iter);
+		z = ft_sum_complex(ft_square_complex(z), c);
+		if ((z.x * z.x) + (z.y * z.y) > fractal->escape_value)
+		{
+			if (iter == fractal->max_iter)
+				color = BLACK;
+			else
+			{
+				color = ft_get_color(iter + 1 - log(log(sqrt(z.x * z.x + z.y * z.y)))/log(2), fractal->max_iter);
+			}
+			ft_mlx_pixel_put(fractal->img, x, y, color);
+			return ;
+		}
+		iter++;
 	}
-	return (ft_get_color(iter, fractal->max_iter));
+	ft_mlx_pixel_put(fractal->img, x, y, BLACK);
+}
+
+static void		ft_set_julia(t_fractal *fractal, int x, int y)
+{
+	t_complex	c;
+	t_complex	z;
+	double		iter;
+	int			color;
+
+	iter = 0;
+	c.x = fractal->julia_real;
+	c.y = fractal->julia_imag;
+	z.x = ft_map(x, fractal->x_min, fractal->x_max, WIDTH);
+	z.y = ft_map(y, fractal->y_min, fractal->y_max, HEIGHT);
+	while (iter < fractal->max_iter)
+	{
+		z = ft_sum_complex(ft_square_complex(z), c);
+		if ((z.x * z.x) + (z.y * z.y) > fractal->escape_value)
+		{
+			if (iter == fractal->max_iter)
+				color = BLACK;
+			else
+			{
+				color = ft_get_color(iter + 1 - log(log(sqrt(z.x * z.x + z.y * z.y)))/log(2), fractal->max_iter);
+			}
+			ft_mlx_pixel_put(fractal->img, x, y, color);
+			return ;
+		}
+		iter++;
+	}
+	ft_mlx_pixel_put(fractal->img, x, y, BLACK);
 }
 
 void	ft_fractal_render(t_fractal *fractal)
@@ -60,20 +92,21 @@ void	ft_fractal_render(t_fractal *fractal)
 	int	x;
 	int	y;
 	int	color;
-
-	x = 0;
+	
+	(void)color;
 	y = 0;
-	while (x < HEIGHT)
+	while (y < HEIGHT)
 	{
-		y = 0;
-		while (y < WIDTH)
+		x = 0;
+		while (x < WIDTH)
 		{
-			//color = 0xFFFFFF;			
-			color = calculate_pixel(fractal, x, y);
-			ft_mlx_pixel_put(fractal, x, y, color);
-			y++;
+			if (fractal->type == JULIA)
+				ft_set_julia(fractal, x, y);
+			else if (fractal->type == MANDELBROT)
+				ft_set_mandelbrot(fractal, x, y);
+			x++;
 		}
-		x++;
+		y++;
 	}
-	mlx_put_image_to_window(fractal->mlx_connection, fractal->mlx_window, fractal->img.img_ptr, 0, 0);
+	mlx_put_image_to_window(fractal->mlx_connection, fractal->mlx_window, fractal->img->img_ptr, 0, 0);
 }
