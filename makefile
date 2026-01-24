@@ -6,7 +6,7 @@
 #    By: mtakiyos <mtakiyos@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/14 19:04:21 by mtakiyos          #+#    #+#              #
-#    Updated: 2026/01/22 15:42:15 by mtakiyos         ###   ########.fr        #
+#    Updated: 2026/01/24 02:32:05 by mtakiyos         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,10 +45,6 @@ SRCS := main.c $(SRC_DIR)/init.c \
 OBJS := $(addprefix $(OBJ_DIR)/,$(notdir $(SRCS:.c=.o)))
 
 MLX_LIBS := -lX11 -lXext -lm
-
-
-# SRCS		:= $(shell find $(SRC_DIRS) -name "*.c")
-# OBJS		:= $(patsubst %.c,$(OBJ_DIR)/%.o,$(SRCS))
 
 DEBUG ?= 0
 ifeq ($(DEBUG), 1)

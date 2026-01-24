@@ -6,7 +6,7 @@
 /*   By: mtakiyos <mtakiyos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 14:42:31 by mtakiyos          #+#    #+#             */
-/*   Updated: 2026/01/23 23:11:21 by mtakiyos         ###   ########.fr       */
+/*   Updated: 2026/01/24 03:35:52 by mtakiyos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,20 +28,27 @@ static void	ft_clamp_color(int *r, int *g, int *b)
 		*b = 255;
 }
 
-int		ft_get_color(double iter, double max_iter)
+int	ft_get_color(double iter, double max_iter)
 {
-	int	r;
-	int	g;
-	int	b;
+	int		r;
+	int		g;
+	int		b;
 	double	t;
-	
+
 	if (iter == max_iter)
 		return (0x000000);
 	t = iter / max_iter;
-	r =	(int)(9 * (1 - t) * t * t * t * 255); 
+	r = (int)(9 * (1 - t) * t * t * t * 255);
 	g = (int)(15 * (1 - t) * (1 - t) * t * t * 255);
-	b =	(int)(8.5 * (1 - t) * (1 - t) * (1 - t) * t * 255);
-	
+	b = (int)(8.5 * (1 - t) * (1 - t) * (1 - t) * t * 255);
 	ft_clamp_color(&r, &g, &b);
 	return (r << 16 | g << 8 | b);
+}
+
+int	ft_get_pixel_color(int iter, t_complex z, int max_iter)
+{
+	if (iter == max_iter)
+		return (BLACK);
+	return (ft_get_color(iter + 1 - log(log(sqrt(z.x * z.x + z.y * z.y)))
+			/ log(2), max_iter));
 }

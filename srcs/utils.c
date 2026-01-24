@@ -6,7 +6,7 @@
 /*   By: mtakiyos <mtakiyos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/22 15:34:33 by mtakiyos          #+#    #+#             */
-/*   Updated: 2026/01/23 17:08:39 by mtakiyos         ###   ########.fr       */
+/*   Updated: 2026/01/24 04:14:21 by mtakiyos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	ft_isdouble(char *nptr)
 		nptr++;
 	if (*nptr == '.')
 		nptr++;
-	if (*nptr == '.')
+	if (*nptr == '.' || *nptr == '\0')
 		return (0);
 	while (ft_isdigit(*nptr))
 	{
